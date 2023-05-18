@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reproductor de Música</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body <h1>>
+   Reproductor de Música</h1>
+
+    <form id="search-form">
+        <input type="text" id="artist-input" placeholder="Ingrese el nombre del artista">
+        <input type="submit" value="Buscar">
+    </form>
+
+    <div id="tracks-container">
+        <!-- Los datos de las canciones se insertarán aquí automáticamente -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search-form').submit(function(event) {
+                event.preventDefault();
+                var artist = $('#artist-input').val();
+                if (artist.trim() !== '') {
+                    $.ajax({
+                        url: '/tracks',
+                        type: 'POST',
+                        data: { artist: artist },
+                        success: function(response) {
+                            var tracksContainer = $('#tracks-container');
+                            tracksContainer.empty();
+
+                            response.tracks.forEach(function(track) {
+                                var trackElement = $('<div>').addClass('track');
+
+                                var coverArtElement = $('<img>').attr('src', track.cover_art);
+                                trackElement.append(coverArtElement);
+
+                                var trackNameElement = $('<p>').text(track.name);
+                                trackElement.append(trackNameElement);
+
+                                var audioElement = $('<audio>').addClass('audio-player').attr('controls', true).attr('src', track.preview_url);
+                                trackElement.append(audioElement);
+
+                                tracksContainer.append(trackElement);
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
