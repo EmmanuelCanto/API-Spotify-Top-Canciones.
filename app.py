@@ -10,8 +10,8 @@ def index():
 
 @app.route('/tracks', methods=['POST'])
 def get_tracks():
-    client_id = ''
-    client_secret = ''
+    client_id = ''#agrega tu client id de spotify developer
+    client_secret = ''#agrega tu client secret de spotify developer
     redirect_uri = 'http://localhost:5000/callback/'
 
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri))
